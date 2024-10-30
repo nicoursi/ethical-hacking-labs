@@ -17,16 +17,16 @@
 #     inet 192.168.60.11/24 brd 192.168.60.255 scope global eth1
 #        valid_lft forever preferred_lft forever
 
-iptables -A FORWARD -p icmp --icmp-type echo-request -o eth1 -j DROP
-# iptables -A FORWARD -p icmp --icmp-type echo-reply -i eth1 -j ACCEPT
+iptables -v -A FORWARD -p icmp --icmp-type echo-request -o eth1 -j DROP
+# iptables -v -A FORWARD -p icmp --icmp-type echo-reply -i eth1 -j ACCEPT
 
 # 2. Outside hosts can ping the router.
-iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
-iptables -A OUTPUT -p icmp --icmp-type echo-reply -j ACCEPT
+iptables -v -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+iptables -v -A OUTPUT -p icmp --icmp-type echo-reply -j ACCEPT
 
 # 3. Internal hosts can ping outside hosts.
-iptables -A FORWARD -p icmp --icmp-type echo-request -i eth1 -o !eth1 -j ACCEPT
-iptables -A FORWARD -p icmp --icmp-type echo-reply -i !eth1 -o eth1 -j ACCEPT
+iptables -v -A FORWARD -p icmp --icmp-type echo-request -i eth1 -o !eth1 -j ACCEPT
+iptables -v -A FORWARD -p icmp --icmp-type echo-reply -i !eth1 -o eth1 -j ACCEPT
 
 # 4. All other packets between the internal and external networks should be blocked
-iptables -P FORWARD DROP
+iptables -v -P FORWARD DROP
